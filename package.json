@@ -1,0 +1,30 @@
+{
+  "name": "lodashsh",
+  "version": "0.1.0",
+  "description": "Lodash usage definer tool ",
+  "author": {
+    "name": "Sergey Kamardin",
+    "email": "gobwas@gmail.com",
+    "url": "https://github.com/gobwas"
+  },
+  "repository": "gobwas/lodashsh",
+  "license": "MIT",
+  "keywords": [
+    "lodashsh",
+    "lodash",
+    "usage",
+    "custom",
+    "build",
+    "ast",
+    "esprima",
+    "esvu"
+  ],
+  "dependencies": {
+    "esvu": "^0.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha ./test"
+  },
+  "main": "./index.js"
+}
