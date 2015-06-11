@@ -6,17 +6,31 @@ var Parser   = require("esvu").Parser,
     Call     = require("esvu").Call,
     Context  = require("esvu").Context,
     assert   = require("assert"),
-    parser, context;
-console.log('esvu', require('esvu'));
+    parser, context, chains;
+
+chains = [];
 
 function propLogger(binding, list, isChain) {
     binding.on("property", function(property) {
         property.on("binding", function(binding) {
             if (binding.value == void 0) {
                 binding.on("call", function(call) {
-                    list.push(property.id.name);
+                	var name, isNewChain;
 
-                    if (isChain || property.id.name == "chain") {
+                    list.indexOf(name = property.id.name) == -1 && list.push(name);
+
+					isNewChain = property.id.name == "chain";
+
+					//if (isNewChain) {
+					//	chains.push(binding);
+					//}
+
+					//todo stopped here
+
+                    if (isChain || isNewChain) {
+						console.log('binding', binding)
+						chains.push(binding)
+						chains.push(property)
                         propLogger(call, true);
                     }
                 });
@@ -32,14 +46,14 @@ function shsh(code) {
 
 	list = [];
 
-	console.log('Context', Context)
-
 	parser = new Parser();
 	context = new Context();
 
 	context.on("scope", function(scope) {
 	    scope.on("variable", function(variable) {
 	        variable.on("binding", function(binding) {
+				chains.indexOf(binding) !== -1 && console.log('!!!');
+
 	            if (binding.value instanceof Call) {
 	                var isLodash;
 
