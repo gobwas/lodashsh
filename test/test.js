@@ -1,5 +1,8 @@
-var assert = require('assert');
-var lodashsh = require('../index');
+var assert = require('assert'),
+	lodashsh = require('../index'),
+	path = require('path'),
+	fs = require('fs'),
+	_ = require('lodash');
 
 describe('lodashsh node module', function () {
 	it('should return prop calls of lodashed variable', function () {
@@ -37,5 +40,13 @@ describe('lodashsh node module', function () {
 		usage = lodashsh("_ = require('lodash'); ref = _; ref.forEach()");
 
 		assert(usage[0] == "forEach", 'It not works =(');
+	});
+
+	it('should work proper with chains', function() {
+		var usage;
+
+		usage = lodashsh(fs.readFileSync(path.resolve(__dirname, "../fixture/chain.js")).toString());
+
+		assert(_.isEqual(['chain', 'groupBy', 'reduce', 'value', 'values', 'min'], usage));
 	});
 });

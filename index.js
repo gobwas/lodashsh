@@ -11,8 +11,8 @@ var Parser   = require("esvu").Parser,
 chains = [];
 refs   = [];
 
-function propLogger(binding, list, isChain) {
-    binding.on("property", function(property) {
+function propLogger(id, list, isChain) {
+    id.on("property", function(property) {
         property.on("binding", function(binding) {
             if (binding.value == void 0) {
                 binding.on("call", function(call) {
@@ -47,7 +47,7 @@ function shsh(code) {
 	        variable.on("binding", function(binding) {
 	        	var ref;
 
-	        	if ((ref = context.find(binding.value, false))) {
+	        	if ((ref = context.find(binding.value))) {
 	        		if (refs.indexOf(ref.binding) != -1) {
 	        			propLogger(binding, list);
 	        		}
