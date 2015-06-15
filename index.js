@@ -20,11 +20,10 @@ function propLogger(binding, list, isChain) {
 
                     list.indexOf(name = property.id.name) == -1 && list.push(name);
 
-					if ((isNewChain = property.id.name == "chain")) {
-						chains.push(call);
-					}
+					isNewChain = property.id.name == "chain";
 
 					if (isNewChain || isChain) {
+						chains.push(call);
 						propLogger(call, list, true);
 					}
                 });
