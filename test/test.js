@@ -13,10 +13,11 @@ describe('lodashsh node module', function () {
 	it('should save references to the chains', function () {
 		var usage;
 
-		usage = lodashsh("_ = require('lodash'); chain = _.chain(); chain.forEach()");
+		usage = lodashsh("_ = require('lodash'); chain = _.chain(); chain.forEach().map()");
 
 		assert(usage[0] == "chain", 'It not works =(');
 		assert(usage[1] == "forEach", 'It not works =(');
+		assert(usage[2] == "map", 'It not works =(');
 	});
 
 	it('should save references to lodash ref', function () {

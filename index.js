@@ -11,7 +11,7 @@ var Parser   = require("esvu").Parser,
 chains = [];
 refs   = [];
 
-function propLogger(binding, list) {
+function propLogger(binding, list, isChain) {
     binding.on("property", function(property) {
         property.on("binding", function(binding) {
             if (binding.value == void 0) {
@@ -22,7 +22,10 @@ function propLogger(binding, list) {
 
 					if ((isNewChain = property.id.name == "chain")) {
 						chains.push(call);
-						propLogger(call, list);
+					}
+
+					if (isNewChain || isChain) {
+						propLogger(call, list, true);
 					}
                 });
             }
@@ -50,7 +53,7 @@ function shsh(code) {
 	        			propLogger(binding, list);
 	        		}
 	        	} else if (chains.indexOf(binding.value) !== -1) {
-					propLogger(binding, list);
+					propLogger(binding, list, true);
 	        	} else if (binding.value instanceof Call) {
 	                var isLodash;
 
