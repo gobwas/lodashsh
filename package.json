@@ -1,6 +1,6 @@
 {
   "name": "lodashsh",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Lodash usage definer tool ",
   "author": {
     "name": "Sergey Kamardin",
@@ -20,7 +20,7 @@
     "esvu"
   ],
   "dependencies": {
-    "esvu": "^0.1.3"
+    "esvu": "^0.1.4"
   },
   "devDependencies": {
     "lodash": "^3.9.3"
