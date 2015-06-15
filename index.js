@@ -6,11 +6,12 @@ var Parser   = require("esvu").Parser,
     Call     = require("esvu").Call,
     Context  = require("esvu").Context,
     assert   = require("assert"),
-    parser, context, chains;
+    parser, context, chains, refs;
 
 chains = [];
+refs   = [];
 
-function propLogger(binding, list, isChain) {
+function propLogger(binding, list) {
     binding.on("property", function(property) {
         property.on("binding", function(binding) {
             if (binding.value == void 0) {
@@ -19,20 +20,10 @@ function propLogger(binding, list, isChain) {
 
                     list.indexOf(name = property.id.name) == -1 && list.push(name);
 
-					isNewChain = property.id.name == "chain";
-
-					//if (isNewChain) {
-					//	chains.push(binding);
-					//}
-
-					//todo stopped here
-
-                    if (isChain || isNewChain) {
-						console.log('binding', binding)
-						chains.push(binding)
-						chains.push(property)
-                        propLogger(call, true);
-                    }
+					if ((isNewChain = property.id.name == "chain")) {
+						chains.push(call);
+						propLogger(call, list);
+					}
                 });
             }
         });
@@ -52,9 +43,15 @@ function shsh(code) {
 	context.on("scope", function(scope) {
 	    scope.on("variable", function(variable) {
 	        variable.on("binding", function(binding) {
-				chains.indexOf(binding) !== -1 && console.log('!!!');
+	        	var ref;
 
-	            if (binding.value instanceof Call) {
+	        	if ((ref = context.find(binding.value, false))) {
+	        		if (refs.indexOf(ref.binding) != -1) {
+	        			propLogger(binding, list);
+	        		}
+	        	} else if (chains.indexOf(binding.value) !== -1) {
+					propLogger(binding, list);
+	        	} else if (binding.value instanceof Call) {
 	                var isLodash;
 
 	                try {
@@ -64,6 +61,7 @@ function shsh(code) {
 	                }
 
 	                if (isLodash) {
+	                	refs.push(binding);
 	                    propLogger(binding, list);
 	                }
 	            }
